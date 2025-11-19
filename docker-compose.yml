@@ -1,4 +1,3 @@
-version: "3"
 services:
   confluence:
     container_name: confluence_${PACKAGE_NAME}

@@ -15,11 +15,9 @@ CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyName=${CATALINA_CONNECTO
 CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyPort=${CATALINA_CONNECTOR_PROXYPORT}"
 CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorScheme=${CATALINA_CONNECTOR_SCHEME}"
 CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorSecure=${CATALINA_CONNECTOR_SECURE}"
-if [ "$JAVA_VER" -ge 90 ]; then
-    CATALINA_OPTS="${CATALINA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-else
-    CATALINA_OPTS="${CATALINA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
-fi
+CATALINA_OPTS="${CATALINA_OPTS} -Dupm.plugin.upload.enabled=true"
+CATALINA_OPTS="${CATALINA_OPTS} -Datlassian.upm.signature.check.disabled=true"
+CATALINA_OPTS="${CATALINA_OPTS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 
 export CATALINA_OPTS
 echo "CATALINA_OPTS=$CATALINA_OPTS"
