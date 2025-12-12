@@ -2,3 +2,4 @@
 *.png
 *.jar
 .env
+*.pem
