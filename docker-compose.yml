@@ -13,12 +13,17 @@ services:
       - LC_ALL
       - LANG
       - LANGUAGE
+      # OpenSearch integration
+      - OPENSEARCH_USERNAME=admin
+      - OPENSEARCH_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      - OPENSEARCH_HTTP_URL=http://opensearch-node:9200
     ports:
       - "${CONFLUENCE_PORT}:8090"
       - "${CONFLUENCE_SYNCHRONY_PORT}:8091"
       - "${DEBUG_PORT}:5005"
     depends_on:
       - ldap
+      - opensearch-node
     networks:
       - confluence-net
     volumes:
@@ -91,6 +96,34 @@ services:
       - "./screenshots:/app/screenshots"
     depends_on:
       - confluence
+    networks:
+      - confluence-net
+
+  opensearch-node:
+    build:
+      context: ./opensearch
+    image: opensearch-no-security
+    container_name: opensearch-node
+    hostname: opensearch-node
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    ports:
+      - "${OPENSEARCH_PORT}:9200"
+      - "${OPENSEARCH_PERF_PORT}:9600"
+    networks:
+      - confluence-net
+
+  opensearch-dashboards:
+    build:
+      context: ./opensearch-dashboards
+    image: opensearch-dashboards-no-security
+    container_name: osd
+    hostname: opensearch-dashboards
+    ports:
+      - "${OPENSEARCH_DASHBOARDS_PORT}:5601"
+    depends_on:
+      - opensearch-node
     networks:
       - confluence-net
 
